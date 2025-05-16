@@ -1,0 +1,143 @@
+# Laravel API Starter - Setup Guide (for Collaborators)
+
+이 문서는 Laravel API 프로젝트를 로컬에서 실행하기 위한 전체 초기 설정 절차를 설명합니다.
+
+---
+
+## ✅ 1. 시스템 요구사항
+
+- Windows 10+, macOS 또는 Linux (권장: WSL2 기반 Ubuntu 환경)
+- Docker Desktop 설치됨: https://www.docker.com/products/docker-desktop
+- Git 설치됨: https://git-scm.com/
+- VSCode 또는 PHP IDE (예: PhpStorm)
+
+---
+
+## 🐳 2. Docker 기반 개발환경 설정
+
+### 2-1. Docker 설치
+
+- [Docker Desktop 다운로드 및 설치](https://www.docker.com/products/docker-desktop)
+- Windows 사용자는 "WSL2 기반 설치"를 권장
+
+### 2-2. git clone (or 소스트리)
+
+```
+bash 
+git clone [레포지토리 URL] cd laravel-api-starter
+```
+
+---
+
+## 📦 3. Laravel Sail 설정
+
+### 3-1. .env 파일 설정
+
+```
+bash 
+cp .env.example .env
+```
+
+.env 파일에서 `SAIL_PHP_VERSION=8.2` 등 설정 확인 (8.2 기반입니다!!!)
+
+### 3-2. Docker 이미지 빌드
+
+```
+bash 
+./vendor/bin/sail build --no-cache
+```
+
+### 3-3. 컨테이너 실행
+
+```
+bash 
+./vendor/bin/sail up -d
+```
+
+※ sail 명령어를 간편하게 사용하려면 `.bashrc`에 다음을 추가:
+
+```
+bash
+alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
+```
+
+적용:
+
+```
+bash
+source ~/.bashrc
+```
+
+---
+
+## 📚 4. 프로젝트 세팅
+
+### 4-1. 의존성 설치
+
+```
+bash
+sail composer install
+```
+
+### 4-2. Swagger 문서 자동화
+
+```
+bash
+sail php artisan l5-swagger:generate
+```
+
+### 4-3. 마이그레이션 및 시더 실행
+
+```
+bash
+sail artisan migrate:fresh --seed
+```
+
+---
+
+## 🔑 5. 인증 테스트 (JWT 기반)
+
+### 5-1. Swagger 접속
+
+브라우저에서 다음 주소 접속
+
+```
+http://localhost/docs
+```
+
+### 5-2. 로그인 API 호출 후 토큰 복사
+
+### 5-3. 상단 `Authorize` 버튼 클릭 → `Bearer [token]` 입력 후 인증
+
+---
+
+## 🧪 6. CRUD 테스트
+
+Swagger의 `/api/products` 관련 API에서:
+
+- POST (Create)
+- GET (Read)
+- PUT (Update)
+- DELETE (Delete)
+
+작동 확인
+
+---
+
+## 🧹 7. 참고 명령어
+
+```
+bash
+sail artisan config:clear
+sail artisan migrate
+sail php -v
+sail npm install
+sail node --version
+```
+
+---
+
+## 👤 Maintainer
+
+이 문서는 [개발팀 안영준]에 의해 관리됩니다.
+수정이 필요한 경우 PR 또는 이슈로 남겨주세요.
